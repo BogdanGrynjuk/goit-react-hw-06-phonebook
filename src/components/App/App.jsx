@@ -1,8 +1,8 @@
 
 import { ContactForm } from '../../components/ContactForm/ContactForm';
 import { ContactList } from '../ContactList/ContactList';
-import { Filter } from '../../components/Filter/Filter'
-import { nanoid } from 'nanoid';
+import { Filter } from '../../components/Filter/Filter';
+
 import { Container } from './App.styled';
 
 export const App = () => {
@@ -12,7 +12,7 @@ export const App = () => {
     <Container>
       <h1>Phoneboock</h1>
       <ContactForm />
-      {/* <Filter  /> */}
+      <Filter  />
       
       <h2>Contacts</h2>
       <ContactList  />

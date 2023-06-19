@@ -1,39 +1,33 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { getContacts } from "redux/selectors";
+import { addContact } from "redux/contactsSlice";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import { Form, Label, Input, Button } from "./ContactForm.styled";
 
-export const ContactForm = ({ onSubmit }) => {
-  const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
-
-  const handleChangeInput = (event) => {
-    const { name, value } = event.currentTarget;
-     
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'number':
-        setNumber(value);
-        break;
-      default:
-        alert('Enter contact name and number!');
-    }
-  };
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = {
-      name,
-      number
-    }
-    onSubmit(data);
-    reset();
-  };
+    const form = event.target;
+    const isDuplicate = Boolean(
+      contacts.find(contact => contact.name.toLowerCase() === form.elements.name.value.toLowerCase())
+    );
+    
+    if (isDuplicate) {
+      Notify.failure(`${form.name.value} is already in contacts`);
+      form.reset();
+      return;
+    };    
 
-  const reset = () => {
-    setName('');
-    setNumber('');
+    const name = form.name.value;
+    const number = form.number.value;    
+
+    dispatch(addContact({name, number}));    
+    form.reset();
   };
 
   return (
@@ -43,8 +37,6 @@ export const ContactForm = ({ onSubmit }) => {
         <Input
           type="text"
           name="name"
-          value={name}
-          onChange={handleChangeInput}
           placeholder="Please enter a name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
@@ -55,9 +47,7 @@ export const ContactForm = ({ onSubmit }) => {
         Number
         <Input
           type="tel"
-          name="number"
-          value={number}
-          onChange={handleChangeInput}
+          name="number"         
           placeholder="Please enter a phone number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
@@ -67,8 +57,4 @@ export const ContactForm = ({ onSubmit }) => {
       <Button type="submit">Add contact</Button>
     </Form>
   );
-};
-
-ContactForm.protoTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };

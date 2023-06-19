@@ -1,11 +1,10 @@
 import { useDispatch } from "react-redux";
 import { updateFilter } from "redux/filterSlice";
+import { Field, Label } from "./Filter.styled";
 
-import { Label, Input } from "./Filter.styled";
-
-export const Filter = () => {
+const Filter = () => {  
   const dispatch = useDispatch();
-
+    
   const handleChange = (event) => {
     dispatch(updateFilter(event.target.value));
   };
@@ -13,11 +12,12 @@ export const Filter = () => {
   return (
     <Label>
       Find contacts by name
-      <Input
-        type="text"
+      <Field
         placeholder="Please enter a name"        
-        onChange={ handleChange }
+        onChange={handleChange}             
       />
     </Label>
-  )
+  );
 };
+
+export default Filter;

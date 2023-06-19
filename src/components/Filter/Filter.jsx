@@ -8,8 +8,7 @@ export const Filter = () => {
 
   const handleChange = (event) => {
     dispatch(updateFilter(event.target.value));
-  }
-
+  };
 
   return (
     <Label>

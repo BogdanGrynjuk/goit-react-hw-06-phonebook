@@ -15,7 +15,7 @@ export const App = () => {
       {/* <Filter  /> */}
       
       <h2>Contacts</h2>
-      {/* <ContactList  /> */}
+      <ContactList  />
     </Container>
   );
 };
